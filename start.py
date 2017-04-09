@@ -1,9 +1,9 @@
-import argparse, pyramda, logging, sys
+import argparse, pyramda, logging, sys, os
 from dotenv import load_dotenv, find_dotenv
 from app import actions
 
 load_dotenv(find_dotenv())
-logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+logging.basicConfig( level=getattr(logging, os.environ.get( 'LOG_LEVEL' ) or 'DEBUG' ) )
 
 def run( ):
     parser = argparse.ArgumentParser()

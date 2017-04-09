@@ -24,7 +24,7 @@ def with_client( fn ):
 
 
 def write_json( filename, data ):
-    logger = logging.getLogger( 'soundcloud_organizer.actino.write_json' )
+    logger = logging.getLogger( 'soundcloud_organizer.action.write_json' )
     logger.info("Writing data to [ %s ]" % filename)
     with open( filename , 'w' ) as file:
         file.write( json.dumps( data ) )
