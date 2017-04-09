@@ -1,6 +1,5 @@
 from __future__ import absolute_import
-import os, soundcloud
-
+import os, soundcloud, logging
 
 def get_all_pages( client, resource ):
     """
@@ -9,13 +8,15 @@ def get_all_pages( client, resource ):
     :param resource:
     :return:
     """
-    print "Downloading [ %s ]" % resource
+    logger = logging.getLogger( 'soundcloud_organizer.soundcloud.get_all_pages' )
+
+    logger.info("Downloading [ %s ]" % resource)
 
     page = 1
 
     response = client.get( resource, limit=200, linked_partitioning=1 ).obj
 
-    print "Page 1 complete"
+    logger.info("Page 1 complete")
     page += 1
 
     for track in response['collection']:
@@ -24,23 +25,24 @@ def get_all_pages( client, resource ):
     while 'next_href' in response:
         response = client.get( response['next_href'], limit=200, linked_partitioning=1 ).obj
 
-        print "Page %s complete" % page
+        logger.info("Page %s complete" % page)
         page += 1
 
         for track in response['collection']:
             yield track
 
-    print "Download complete"
+    logger.info("Download complete")
 
 
 def get_client( ):
-    print "Connecting to Soundcloud"
+    logger = logging.getLogger( 'soundcloud_organizer.soundcloud.get_client' )
+    logger.info("Connecting to Soundcloud")
     client = soundcloud.Client(
         client_id = os.environ.get( 'SOUNDCLOUD_ID' ),
         client_secret = os.environ.get( 'SOUNDCLOUD_SECRET' ),
         username = os.environ.get( 'SOUNDCLOUD_USER' ),
         password = os.environ.get( 'SOUNDCLOUD_PASS' )
     )
-    print "Connected"
+    logger.info("Connected")
 
     return client
